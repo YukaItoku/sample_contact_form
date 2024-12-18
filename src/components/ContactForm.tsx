@@ -5,8 +5,8 @@ export default function Contact() {
     const [currentStep, setCurrentStep] = useState(1)
     const [isWorkingError, setIsWorkingError] = useState(false)
     const [isSalaryError, setIsSalaryError] = useState(false)
-    const [isJobChangeError, setIsJobChangeError] = useState(false)
-    const [isHouseError, setIsHouseError] = useState(false)
+    const [isJobChangeWillError, setIsJobChangeWillError] = useState(false)
+    const [isCurrentPrefectureError, setIsCurrentPrefectureError] = useState(false)
     const [isNameError, setIsNameError] = useState(false)
     const [isMailError, setIsMailError] = useState(false)
     const [mailErrortext, setMailErrortext] = useState('')
@@ -14,15 +14,15 @@ export default function Contact() {
     // 解答保持用State
     const [isWorking, setIsWorking] = useState('')
     const [currentSalary, setCurrentSalary] = useState('')
-    const [wantChangeJob, setWantChangeJob] = useState('')
-    const [currentHouse, setCurrentHouse] = useState('')
+    const [haveJobChangeWill, setHaveJobChangeWill] = useState('')
+    const [currentPrefecture, setCurrentPrefecture] = useState('')
     const [name, setName] = useState('')
     const [mail, setMail] = useState('')
     // 解答保持用State
 
     const needToSelectText = "選択してください"
     const needToInputText = "入力してください"
-    const needToCheckEmail = "有効なアドレスを入力してください"
+    const needToCheckEmailText = "有効なアドレスを入力してください"
 
     const createMailContent = () => {
         let formattedQandA: string[] = []
@@ -41,10 +41,10 @@ export default function Contact() {
                     formattedQandA.push(`${ele}: ${currentSalary}`)
                     break
                 case 2:
-                    formattedQandA.push(`${ele}: ${wantChangeJob}`)
+                    formattedQandA.push(`${ele}: ${haveJobChangeWill}`)
                     break
                 case 3:
-                    formattedQandA.push(`${ele}: ${currentHouse}`)
+                    formattedQandA.push(`${ele}: ${currentPrefecture}`)
                     break
                 case 4:
                     formattedQandA.push(`${ele}: ${name}`)
@@ -72,6 +72,8 @@ export default function Contact() {
         
             const template_param = {
                 message: createMailContent(),
+                reply_to: mail,
+                name: name,
             }
 
             setCurrentStep(currentStep + 1)
@@ -109,18 +111,18 @@ export default function Contact() {
                 }
                 break
             case 2:
-                if(wantChangeJob === "" && currentHouse === "") {
-                    setIsJobChangeError(true)
-                    setIsHouseError(true)
-                } else if(wantChangeJob === "") {
-                    setIsJobChangeError(true)
-                    setIsHouseError(false)
-                } else if(currentHouse === "") {
-                    setIsHouseError(true)
-                    setIsJobChangeError(false)
-                } else if(wantChangeJob !== "" && currentHouse !== "") {
-                    setIsJobChangeError(false)
-                    setIsHouseError(false)
+                if(haveJobChangeWill === "" && currentPrefecture === "") {
+                    setIsJobChangeWillError(true)
+                    setIsCurrentPrefectureError(true)
+                } else if(haveJobChangeWill === "") {
+                    setIsJobChangeWillError(true)
+                    setIsCurrentPrefectureError(false)
+                } else if(currentPrefecture === "") {
+                    setIsCurrentPrefectureError(true)
+                    setIsJobChangeWillError(false)
+                } else if(haveJobChangeWill !== "" && currentPrefecture !== "") {
+                    setIsJobChangeWillError(false)
+                    setIsCurrentPrefectureError(false)
                     return true
                 }
                 break
@@ -136,7 +138,7 @@ export default function Contact() {
                     setMailErrortext(needToInputText)
                 } else if(!checkEmail(mail)) {
                     setIsMailError(true)
-                    setMailErrortext(needToCheckEmail)
+                    setMailErrortext(needToCheckEmailText)
                 } else {
                     setIsMailError(false)
                 }
@@ -294,14 +296,14 @@ export default function Contact() {
                                                         <button
                                                             key={optIndex}
                                                             onClick={(e) => {
-                                                                setWantChangeJob(e.currentTarget.textContent || "")
+                                                                setHaveJobChangeWill(e.currentTarget.textContent || "")
                                                             }}
                                                         >
                                                             {option}
                                                         </button>
                                                     ))}
                                                 </div>
-                                                {isJobChangeError && <span>{needToSelectText}</span>}
+                                                {isJobChangeWillError && <span>{needToSelectText}</span>}
                                             </div>
                                     }
                                     {
@@ -310,9 +312,9 @@ export default function Contact() {
                                             <select
                                                 onChange={(e) => {
                                                     if(e.target.value === needToSelectText) {
-                                                        setCurrentHouse("")
+                                                        setCurrentPrefecture("")
                                                     } else {
-                                                        setCurrentHouse(e.target.value)
+                                                        setCurrentPrefecture(e.target.value)
                                                     }
                                                 }}
                                             >
@@ -320,7 +322,7 @@ export default function Contact() {
                                                     <option key={optIndex} value={option} data-value={option}>{option}</option>
                                                 ))}
                                             </select>
-                                            {isHouseError && <span>{needToSelectText}</span>}
+                                            {isCurrentPrefectureError && <span>{needToSelectText}</span>}
                                         </div>
                                     }
                                     {
